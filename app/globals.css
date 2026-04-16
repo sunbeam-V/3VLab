@@ -1,26 +1,117 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+
+    /* Темная тема (по умолчанию) */
+    :root {
+        --bg-dark: #0A0A0F;
+        --bg-surface: #1A1A2E;
+        --accent-silver: #E2E8F0;
+        --accent-purple: #8B5CF6;
+        --accent-purple-bright: #C084FC;
+        --text-primary: #F1F5F9;
+        --text-secondary: #94A3B8;
+        --border-color: rgba(139, 92, 246, 0.2);
+    }
+
+    /* Светлая тема */
+    [data-theme="light"] {
+        --bg-dark: #F8FAFC;
+        --bg-surface: #FFFFFF;
+        --accent-silver: #1E293B;
+        --accent-purple: #7C3AED;
+        --accent-purple-bright: #A855F7;
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --border-color: rgba(124, 58, 237, 0.15);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+            color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Плавный переход для всех элементов с цветом */
+    * {
+        transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+        transition-duration: 0.4s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Исключаем transition для анимаций, которые не должны быть плавными */
+    .no-transition {
+        transition: none !important;
+    }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer components {
+    .container-custom {
+        @apply max-w-7xl mx-auto px-6 lg:px-8;
+    }
+
+    .glow-text {
+        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    }
+
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-bright));
+        padding: 1px;
+        border-radius: 12px;
+    }
+
+    .gradient-border>* {
+        background-color: var(--bg-surface);
+        border-radius: 11px;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 2s ease-out forwards;
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+}
+
+.delay-1000 {
+    animation-delay: 2s;
 }
