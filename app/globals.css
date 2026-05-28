@@ -4,28 +4,211 @@
 
 @layer base {
 
-    /* Темная тема (по умолчанию) */
+    /* =========================================
+       DARK THEME (default)
+    ========================================= */
     :root {
-        --bg-dark: #0A0A0F;
-        --bg-surface: #1A1A2E;
-        --accent-silver: #E2E8F0;
-        --accent-purple: #8B5CF6;
-        --accent-purple-bright: #C084FC;
-        --text-primary: #F1F5F9;
-        --text-secondary: #94A3B8;
-        --border-color: rgba(139, 92, 246, 0.2);
+
+        /* ========= BACKGROUNDS ========= */
+
+        /* Основной фон */
+        --bg-primary: #0F1117;
+
+        /* Карточки / navbar / surface */
+        --bg-surface: #171A23;
+
+        /* Glass */
+        --bg-surface-alpha: rgba(23, 26, 35, 0.72);
+
+        /* Hover */
+        --bg-hover: #1D2230;
+
+        /* ========= BRAND COLORS ========= */
+
+        /* Основной синий из лого */
+        --accent-blue: #345FD0;
+
+        /* Глубокий синий */
+        --accent-deep-blue: #1F3FAF;
+
+        /* Бирюзовый */
+        --accent-cyan: #2BA7C9;
+
+        /* Зеленый */
+        --accent-green: #85C143;
+
+        /* Темный текстовый */
+        --accent-dark: #262939;
+
+        /* ========= TEXT ========= */
+
+        --text-primary: #F3F6FF;
+        --text-secondary: #97A3BD;
+        --text-muted: #69758F;
+
+        --text-accent: #5B84FF;
+
+        /* ========= BORDERS ========= */
+
+        --border-color: rgba(91, 132, 255, 0.14);
+
+        --border-hover: rgba(91, 132, 255, 0.32);
+
+        /* ========= EFFECTS ========= */
+
+        --glass-backdrop: blur(16px);
+
+        --shadow-glow:
+                0 0 30px rgba(52, 95, 208, 0.16);
+
+        --shadow-card:
+                0 10px 40px rgba(0, 0, 0, 0.35);
+
+        /* ========= GRADIENTS ========= */
+
+        /* Основной брендовый */
+        --gradient-primary:
+                linear-gradient(
+                        135deg,
+                        #85C143 0%,
+                        #2BA7C9 40%,
+                        #345FD0 72%,
+                        #1F3FAF 100%
+                );
+
+        /* Глубокий синий */
+        --gradient-blue:
+                linear-gradient(
+                        135deg,
+                        #4F7BFF 0%,
+                        #345FD0 55%,
+                        #1F3FAF 100%
+                );
+
+        /* Cyan → Blue */
+        --gradient-cyan:
+                linear-gradient(
+                        135deg,
+                        #47D1D8 0%,
+                        #2BA7C9 40%,
+                        #345FD0 100%
+                );
+
+        /* Green → Cyan */
+        --gradient-tech:
+                linear-gradient(
+                        135deg,
+                        #85C143 0%,
+                        #54C98B 30%,
+                        #2BA7C9 100%
+                );
+
+        /* Dark glass border */
+        --gradient-border:
+                linear-gradient(
+                        135deg,
+                        rgba(133, 193, 67, 0.5),
+                        rgba(43, 167, 201, 0.5),
+                        rgba(52, 95, 208, 0.5)
+                );
     }
 
-    /* Светлая тема */
+    /* =========================================
+       LIGHT THEME
+    ========================================= */
+
     [data-theme="light"] {
-        --bg-dark: #F8FAFC;
+
+        /* ========= BACKGROUNDS ========= */
+
+        --bg-primary: #F5F7FC;
+
         --bg-surface: #FFFFFF;
-        --accent-silver: #1E293B;
-        --accent-purple: #7C3AED;
-        --accent-purple-bright: #A855F7;
-        --text-primary: #0F172A;
-        --text-secondary: #475569;
-        --border-color: rgba(124, 58, 237, 0.15);
+
+        --bg-surface-alpha: rgba(255, 255, 255, 0.72);
+
+        --bg-hover: #EEF2FF;
+
+        /* ========= BRAND COLORS ========= */
+
+        --accent-blue: #345FD0;
+
+        --accent-deep-blue: #294DB5;
+
+        --accent-cyan: #2BA7C9;
+
+        --accent-green: #85C143;
+
+        --accent-dark: #262939;
+
+        /* ========= TEXT ========= */
+
+        --text-primary: #1E2433;
+
+        --text-secondary: #5E6983;
+
+        --text-muted: #8891A7;
+
+        --text-accent: #345FD0;
+
+        /* ========= BORDERS ========= */
+
+        --border-color: rgba(52, 95, 208, 0.12);
+
+        --border-hover: rgba(52, 95, 208, 0.24);
+
+        /* ========= EFFECTS ========= */
+
+        --glass-backdrop: blur(16px);
+
+        --shadow-glow:
+                0 0 24px rgba(52, 95, 208, 0.10);
+
+        --shadow-card:
+                0 8px 30px rgba(25, 35, 68, 0.08);
+
+        /* ========= GRADIENTS ========= */
+
+        --gradient-primary:
+                linear-gradient(
+                        135deg,
+                        #85C143 0%,
+                        #2BA7C9 42%,
+                        #345FD0 72%,
+                        #294DB5 100%
+                );
+
+        --gradient-blue:
+                linear-gradient(
+                        135deg,
+                        #5D84F5 0%,
+                        #345FD0 55%,
+                        #294DB5 100%
+                );
+
+        --gradient-cyan:
+                linear-gradient(
+                        135deg,
+                        #57D7E0 0%,
+                        #2BA7C9 45%,
+                        #345FD0 100%
+                );
+
+        --gradient-tech:
+                linear-gradient(
+                        135deg,
+                        #97D85C 0%,
+                        #5FD1A3 35%,
+                        #2BA7C9 100%
+                );
+
+        --gradient-border:
+                linear-gradient(
+                        135deg,
+                        rgba(133, 193, 67, 0.35),
+                        rgba(43, 167, 201, 0.35),
+                        rgba(52, 95, 208, 0.35)
+                );
     }
 
     * {
@@ -35,83 +218,10 @@
     }
 
     body {
-        background-color: var(--bg-dark);
+        background: var(--bg-primary);
         color: var(--text-primary);
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-            color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition:
+                background 0.25s ease,
+                color 0.25s ease;
     }
-
-    /* Плавный переход для всех элементов с цветом */
-    * {
-        transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-        transition-duration: 0.4s;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Исключаем transition для анимаций, которые не должны быть плавными */
-    .no-transition {
-        transition: none !important;
-    }
-}
-
-@layer components {
-    .container-custom {
-        @apply max-w-7xl mx-auto px-6 lg:px-8;
-    }
-
-    .glow-text {
-        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
-    }
-
-    .gradient-border {
-        position: relative;
-        background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-bright));
-        padding: 1px;
-        border-radius: 12px;
-    }
-
-    .gradient-border>* {
-        background-color: var(--bg-surface);
-        border-radius: 11px;
-    }
-}
-
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.animate-fade-in-up {
-    animation: fade-in-up 2s ease-out forwards;
-}
-
-.animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-}
-
-.delay-1000 {
-    animation-delay: 2s;
 }
