@@ -8,12 +8,14 @@
     :root {
         --bg-dark: #0A0A0F;
         --bg-surface: #1A1A2E;
-        --accent-silver: #E2E8F0;
         --accent-purple: #8B5CF6;
+        --card-bg: #1E293B;
+        --accent-silver: #E2E8F0;
         --accent-purple-bright: #C084FC;
         --text-primary: #F1F5F9;
         --text-secondary: #94A3B8;
         --border-color: rgba(139, 92, 246, 0.2);
+        --bg-alert: #F43F5E;
     }
 
     /* Светлая тема */
@@ -23,9 +25,12 @@
         --accent-silver: #1E293B;
         --accent-purple: #7C3AED;
         --accent-purple-bright: #A855F7;
+        --accent-tint: #EDE9FE;
+        --accent-deep: #4F46E5;
         --text-primary: #0F172A;
         --text-secondary: #475569;
         --border-color: rgba(124, 58, 237, 0.15);
+        --bg-alert: #e11D48;
     }
 
     * {

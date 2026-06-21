@@ -1,12 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import Logo from './Logo';
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    const [underlineStyle, setUnderlineStyle] = useState({
+        left: 0,
+        width: 0,
+        opacity: 0,
+    });
+    
+    const navRef = useRef<HTMLDivElement>(null);
+    const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -14,30 +25,80 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleLinkHover = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+        const link = linkRefs.current[href];
+        if (!link || !navRef.current) return;
+
+        const navRect = navRef.current.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
+
+        setUnderlineStyle({
+            left: linkRect.left - navRect.left,
+            width: linkRect.width,
+            opacity: 1,
+        });
+    };
+
+    const handleNavLeave = () => {
+        setUnderlineStyle((prev) => ({ ...prev, opacity: 0 }));
+    };
+
+    const navLinks = [
+        { href: '/games', label: 'Игры' },
+        { href: '/blog', label: 'Блог' },
+        { href: '/about', label: 'О нас' },
+        { href: '/forum', label: 'Forum' },
+        { href: '/auth', label: 'Auth' },
+        { href: '/studio', label: 'Studio' },
+    ];
+
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[var(--bg-dark)]/95 backdrop-blur-xl border-b' : 'bg-transparent'
-                }`} style={{ borderColor: 'var(--border-color)' }}>
+            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[var(--bg-dark)]/95 backdrop-blur-xl border-b' : 'bg-transparent'}`} style={{ borderColor: 'var(--border-color)' }}>
                 <div className="container-custom">
                     <div className="flex items-center justify-between h-20">
-                        {/* Логотип */}
                         <Link href="/" className="group relative">
-                            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-[var(--accent-silver)] to-[var(--accent-purple-bright)] bg-clip-text text-transparent">
-                                3VLab
-                            </h1>
+                            <Logo />
                             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--accent-purple)] to-[var(--accent-purple-bright)] transition-all duration-500 group-hover:w-full" />
                         </Link>
 
-                        {/* Десктопная навигация */}
                         <nav className="hidden md:flex items-center space-x-10">
-                            <NavLink href="/games">Игры</NavLink>
-                            <NavLink href="/blog">Блог</NavLink>
-                            <NavLink href="/about">О нас</NavLink>
-                            <NavLink href="/studio">Studio</NavLink>
+                            <div
+                                ref={navRef}
+                                className="relative flex items-center space-x-10"
+                                onMouseLeave={handleNavLeave}
+                            >
+                                {navLinks.map(({ href, label }) => (
+                                    <NavLink
+                                        key={href}
+                                        href={href}
+                                        onHover={(e) => handleLinkHover(href, e)}
+                                        ref={(el) => {
+                                            linkRefs.current[href] = el;
+                                        }}
+                                    >
+                                        {label}
+                                    </NavLink>
+                                ))}
+                                <motion.span
+                                    className="absolute -bottom-1 h-0.5 bg-gradient-to-r from-[var(--accent-purple)] to-[var(--accent-purple-bright)] rounded-full"
+                                    animate={{
+                                        left: underlineStyle.left,
+                                        width: underlineStyle.width,
+                                        opacity: underlineStyle.opacity,
+                                    }}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 400,
+                                        damping: 30,
+                                        mass: 0.8,
+                                    }}
+                                    style={{ willChange: 'left, width, opacity' }}
+                                />
+                            </div>
                             <ThemeToggle />
                         </nav>
 
-                        {/* Мобильная кнопка */}
                         <div className="flex items-center gap-4 md:hidden">
                             <ThemeToggle />
                             <button
@@ -55,35 +116,44 @@ export default function Header() {
                         </div>
                     </div>
 
-                    {/* Мобильное меню */}
-                    <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'
-                        }`}>
+                    <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}>
                         <div className="flex flex-col space-y-4">
-                            <MobileNavLink href="/games" onClick={() => setIsMenuOpen(false)}>Игры</MobileNavLink>
-                            <MobileNavLink href="/blog" onClick={() => setIsMenuOpen(false)}>Блог</MobileNavLink>
-                            <MobileNavLink href="/about" onClick={() => setIsMenuOpen(false)}>О нас</MobileNavLink>
-                            <MobileNavLink href="/studio" onClick={() => setIsMenuOpen(false)}>Studio</MobileNavLink>
+                            {navLinks.map(({ href, label }) => (
+                                <MobileNavLink key={href} href={href} onClick={() => setIsMenuOpen(false)}>
+                                    {label}
+                                </MobileNavLink>
+                            ))}
                         </div>
                     </div>
                 </div>
             </header>
-
             <div className="h-20" />
         </>
     );
 }
 
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+const NavLink = ({
+    href,
+    children,
+    onHover,
+    ref,
+}: {
+    href: string;
+    children: React.ReactNode;
+    onHover: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+    ref?: (el: HTMLAnchorElement | null) => void;
+}) => {
     return (
         <Link
             href={href}
-            className="relative group text-sm font-medium transition-colors hover:text-[var(--accent-purple-bright)]"
+            ref={ref}
+            onMouseEnter={onHover}
+            className="relative text-sm font-medium transition-colors duration-300 hover:text-[var(--accent-purple-bright)]"
         >
             {children}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--accent-purple)] to-[var(--accent-purple-bright)] transition-all duration-300 group-hover:w-full" />
         </Link>
     );
-}
+};
 
 function MobileNavLink({ href, children, onClick }: { href: string; children: React.ReactNode; onClick: () => void }) {
     return (
