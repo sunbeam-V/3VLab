@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/app/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+const inter = Inter({
+    subsets: ["latin", "cyrillic"],
+    preload: false,
+});
 
 export const metadata: Metadata = {
     title: "3VLab",
@@ -19,9 +23,11 @@ export default function RootLayout({
     return (
         <html lang="ru">
             <body className={`${inter.className} min-h-screen flex flex-col`}>
-                <Header />
-                <main className="flex-grow">{children}</main>
-                <Footer />
+                <ThemeProvider>
+                    <Header />
+                    <main className="flex-grow">{children}</main>
+                    <Footer />
+                </ThemeProvider>
             </body>
         </html>
     );

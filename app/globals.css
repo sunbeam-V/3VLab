@@ -4,35 +4,57 @@
 
 @layer base {
 
-    /* Темная тема (по умолчанию) */
+    /* ----- ТЁМНАЯ ТЕМА (по умолчанию) ----- */
     :root {
-        --bg-dark: #0A0A0F;
-        --bg-surface: #1A1A2E;
-        --accent-purple: #8B5CF6;
-        --card-bg: #1E293B;
-        --accent-silver: #E2E8F0;
-        --accent-purple-bright: #C084FC;
-        --text-primary: #F1F5F9;
-        --text-secondary: #94A3B8;
-        --border-color: rgba(139, 92, 246, 0.2);
-        --bg-alert: #F43F5E;
+        --color-primary: #233588;
+        --color-secondary: #88BF47;
+        --color-accent: #32ADBB;
+        --color-primary-light: #3A5BB5;
+        --color-primary-dark: #1A2866;
+        --color-secondary-light: #A8D96F;
+        --color-accent-light: #5FC9D6;
+        --color-accent-dark: #258A96;
+        --bg-primary: #0B0E1A;
+        --bg-surface: #141B2D;
+        --bg-surface-alpha: rgba(20, 27, 45, 0.8);
+        --text-primary: #E8EDF5;
+        --text-secondary: #9AACCA;
+        --border-color: rgba(50, 173, 187, 0.25);
+        --shadow-glow: 0 0 30px rgba(50, 173, 187, 0.15);
+        --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        --gradient-secondary: linear-gradient(135deg, var(--color-accent), var(--color-secondary));
+        --gradient-magic: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        --icon-color: #ffffff;
     }
 
-    /* Светлая тема */
+    /* ----- СВЕТЛАЯ ТЕМА ----- */
     [data-theme="light"] {
-        --bg-dark: #F8FAFC;
+        --color-primary: #233588;
+        --color-secondary: #88BF47;
+        --color-accent: #32ADBB;
+        --color-primary-light: #3A5BB5;
+        --color-primary-dark: #1A2866;
+        --color-secondary-light: #A8D96F;
+        --color-accent-light: #5FC9D6;
+        --color-accent-dark: #258A96;
+        --bg-primary: #F4F7FC;
         --bg-surface: #FFFFFF;
-        --accent-silver: #1E293B;
-        --accent-purple: #7C3AED;
-        --accent-purple-bright: #A855F7;
-        --accent-tint: #EDE9FE;
-        --accent-deep: #4F46E5;
-        --text-primary: #0F172A;
-        --text-secondary: #475569;
-        --border-color: rgba(124, 58, 237, 0.15);
-        --bg-alert: #e11D48;
+        --bg-surface-alpha: rgba(255, 255, 255, 0.85);
+        --text-primary: #111827;
+        --text-secondary: #4B5B7A;
+        --border-color: rgba(50, 173, 187, 0.2);
+        --shadow-glow: 0 0 30px rgba(50, 173, 187, 0.08);
+        --shadow-card: 0 8px 32px rgba(35, 53, 136, 0.1);
+        --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        --gradient-secondary: linear-gradient(135deg, var(--color-accent), var(--color-secondary));
+        --gradient-magic: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
+        --icon-color: #111827;
     }
 
+    /* ----- ГЛОБАЛЬНЫЕ СТИЛИ ----- */
     * {
         margin: 0;
         padding: 0;
@@ -40,23 +62,60 @@
     }
 
     body {
-        background-color: var(--bg-dark);
+        background-color: var(--bg-primary);
         color: var(--text-primary);
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-            color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Переход только для фона и текста */
+        transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* Плавный переход для всех элементов с цветом */
-    * {
-        transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-        transition-duration: 0.4s;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Исключаем transition для анимаций, которые не должны быть плавными */
-    .no-transition {
+    /* 
+    Класс, отключающий все переходы на время инициализации и смены темы.
+    Используется в ThemeProvider.
+  */
+    html.no-transition,
+    html.no-transition * {
         transition: none !important;
+    }
+
+    /* 
+    Избирательные переходы для элементов, которые должны плавно менять 
+    свои цвета при смене темы.
+  */
+    a,
+    button,
+    .card,
+    .btn-primary,
+    .glow-text,
+    .gradient-border,
+    .gradient-border>*,
+    header,
+    footer,
+    .container-custom,
+    .section,
+    .media-card,
+    .nav-link {
+        transition: background-color 0.3s ease, border-color 0.3s ease,
+            color 0.3s ease, fill 0.3s ease, stroke 0.3s ease,
+            box-shadow 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Скроллбар */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-accent);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-accent-light);
     }
 }
 
@@ -66,12 +125,12 @@
     }
 
     .glow-text {
-        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        text-shadow: var(--shadow-glow);
     }
 
     .gradient-border {
         position: relative;
-        background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-bright));
+        background: var(--gradient-primary);
         padding: 1px;
         border-radius: 12px;
     }
@@ -80,8 +139,34 @@
         background-color: var(--bg-surface);
         border-radius: 11px;
     }
+
+    .btn-primary {
+        @apply px-6 py-3 rounded-lg font-medium text-white transition-all duration-300;
+        background: var(--gradient-primary);
+        box-shadow: 0 4px 14px rgba(50, 173, 187, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(50, 173, 187, 0.45);
+    }
+
+    .card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: var(--shadow-card);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(50, 173, 187, 0.15);
+    }
 }
 
+/* Анимации (без изменений) */
 @keyframes fade-in-up {
     from {
         opacity: 0;
@@ -94,7 +179,7 @@
     }
 }
 
-@keyframes gradient {
+@keyframes gradient-shift {
     0% {
         background-position: 0% 50%;
     }
@@ -109,14 +194,14 @@
 }
 
 .animate-fade-in-up {
-    animation: fade-in-up 2s ease-out forwards;
+    animation: fade-in-up 0.8s ease-out forwards;
 }
 
 .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
+    animation: gradient-shift 4s ease infinite;
 }
 
 .delay-1000 {
-    animation-delay: 2s;
+    animation-delay: 1s;
 }

@@ -1,85 +1,56 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useTheme } from '@/app/ThemeProvider';
+import { motion } from 'framer-motion';
+import ThemeIcon from './ThemeIcon';
+import { useModeAnimation, ThemeAnimationType } from 'react-theme-switch-animation';
 
 export default function ThemeToggle() {
-    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
-        if (savedTheme) {
-            setTheme(savedTheme);
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-    }, []);
+    const { ref, toggleSwitchTheme, isDarkMode } = useModeAnimation({
+        animationType: ThemeAnimationType.CIRCLE,
+        duration: 750,
+        isDarkMode: theme === 'dark',
+        onDarkModeChange: (isDark: boolean) => {
+            const newTheme = isDark ? 'dark' : 'light';
+            if (newTheme !== theme) {
+                toggleTheme();
+            }
+        },
+    });
 
-    const toggleTheme = () => {
-        if (isTransitioning) return;
-
-        setIsTransitioning(true);
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-
-        // Добавляем плавное изменение яркости всего экрана
-        const wrapper = document.createElement('div');
-        wrapper.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      backdrop-filter: brightness(1);
-      pointer-events: none;
-      z-index: 9999;
-      transition: backdrop-filter 1s ease-in-out;
-    `;
-        document.body.appendChild(wrapper);
-
-        // Затемняем/осветляем экран
-        const isGoingToLight = newTheme === 'light';
-        requestAnimationFrame(() => {
-            wrapper.style.backdropFilter = `brightness(${isGoingToLight ? '1.3' : '0.7'})`;
-        });
-
-        setTimeout(() => {
-            wrapper.style.backdropFilter = `brightness(${isGoingToLight ? '0.9' : '1.1'})`;
-        }, 500);
-
-        // Меняем тему
-        setTimeout(() => {
-            setTheme(newTheme);
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            wrapper.style.backdropFilter = 'brightness(1)';
-
-            setTimeout(() => {
-                document.body.removeChild(wrapper);
-                setIsTransitioning(false);
-            }, 500);
-        }, 800);
+    const handleClick = () => {
+        toggleSwitchTheme();
     };
 
     return (
         <button
-            onClick={toggleTheme}
-            disabled={isTransitioning}
-            className={`relative w-12 h-6 rounded-full transition-all duration-300 overflow-hidden ${isTransitioning ? 'opacity-50 cursor-wait' : 'hover:scale-105'
-                }`}
+            ref={ref}
+            onClick={handleClick}
+            className="relative w-8 h-8 rounded-full transition-all duration-300 flex items-center justify-center hover:scale-110"
             style={{
-                backgroundColor: theme === 'dark' ? 'var(--accent-purple)' : 'var(--bg-surface)',
-                border: '1px solid var(--border-color)'
+                backgroundColor: 'var(--bg-surface)',
+                border: '1px solid var(--border-color)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
             }}
+            aria-label="Переключить тему"
         >
-            <div
-                className={`absolute top-0.5 w-5 h-5 rounded-full transition-all duration-500 ease-out ${theme === 'dark' ? 'left-0.5 bg-white' : 'left-6 bg-[#FBBF24]'
-                    }`}
-            />
-
-            <div className="absolute inset-0 flex items-center justify-between px-1.5">
-                <span className="text-[10px] opacity-70">🌙</span>
-                <span className="text-[10px] opacity-70">☀️</span>
-            </div>
+            <motion.div
+                className="w-5 h-5"
+                animate={{
+                    rotate: theme === 'dark' ? 0 : 180,
+                    scale: theme === 'dark' ? 1 : 1.2,
+                }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                style={{
+                    filter: theme === 'dark'
+                        ? 'none'
+                        : 'drop-shadow(0 0 6px rgba(251, 191, 36, 0.5))',
+                }}
+            >
+                <ThemeIcon className="text-black dark:text-white" />
+            </motion.div>
         </button>
     );
 }
